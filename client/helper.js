@@ -1,4 +1,4 @@
-const base_url = "http://localhost:3100"
+const base_url = "http://localhost:3121"
 
 function auth() {
   if (localStorage.access_token) {
@@ -42,13 +42,12 @@ function login(em = "", pass = "") {
     data: { email, password }
   })
     .done((response) => {
-      console.log(response, "<<THIS IS RESPONSE LOGIN");
+      console.log("THIS IS RESPONSE LOGIN");
       localStorage.setItem("access_token", response.access_token)
       auth()
     })
     .fail((hxr, text) => {
-      console.log(hxr);
-      console.log(text, "<<THIS IS ERROR LOGIN");
+      console.log("THIS IS ERROR LOGIN");
       const message = hxr.responseJSON.message
       showToast(message)
     })
@@ -67,12 +66,11 @@ function register() {
     data: { name, email, password }
   })
     .done((response) => {
-      console.log(response, "<<THIS IS RESPONSE REGISTER");
+      console.log("THIS IS RESPONSE REGISTER");
       login(email, password)
     })
     .fail((hxr, text) => {
-      console.log(hxr);
-      console.log(text, "<<THIS IS ERROR REGISTER");
+      console.log("THIS IS ERROR REGISTER");
       const message = hxr.responseJSON.message.join("\n")
       showToast(message)
     })
@@ -107,12 +105,11 @@ function deleteTodo(id) {
     }
   })
     .done((response) => {
-      console.log(response, "<<THIS IS RESPONSE DELETE");
+      console.log("THIS IS RESPONSE DELETE");
       auth()
     })
     .fail((hxr, text) => {
-      console.log(hxr);
-      console.log(text, "<<THIS IS ERROR DELETE");
+      console.log("THIS IS ERROR DELETE");
       const message = hxr.responseJSON.message
       showToast(message)
     })
@@ -134,12 +131,11 @@ function setStatusTodo(id) {
       })
     })
     .done((response) => {
-      console.log(response, "<<THIS IS RESPONSE PATCH");
+      console.log("THIS IS RESPONSE PATCH");
       auth()
     })
     .fail((hxr, text) => {
-      console.log(hxr);
-      console.log(text, "<<THIS IS ERROR PATCH");
+      console.log("THIS IS ERROR PATCH");
       const message = hxr.responseJSON.message
       showToast(message)
     })
@@ -150,7 +146,6 @@ function editTodo(id) {
   getTodo(id)
     .done(response => {
       const due = new Date(response.due_date).toISOString().substr(0, 10);
-      console.log(due);
       $(`#todo-${response.id}`).empty()
       $(`#todo-${response.id}`).html(`
         <div>
@@ -191,11 +186,10 @@ function editTodo(id) {
         putTodo(response.id)
       })
 
-      console.log(response, "<<THIS IS RESPONSE POPULATE");
+      console.log("THIS IS RESPONSE POPULATE");
     })
     .fail((hxr, text) => {
-      console.log(hxr);
-      console.log(text, "<<THIS IS ERROR POPULATE");
+      console.log("THIS IS ERROR POPULATE");
       const message = hxr.responseJSON.message
       showToast(message)
     })
@@ -207,7 +201,6 @@ function putTodo(id) {
   const description = $("#edit-description").val()
   const status = $('input[name=status]:checked', "#form-edit").val()
   const due_date = $("#edit-due_date").val()
-  console.log(title, description, status, due_date);
   $.ajax({
     method: "PUT",
     url: base_url + "/todos/" + id,
@@ -217,12 +210,11 @@ function putTodo(id) {
     data: { title, description, status, due_date }
   })
     .done((response) => {
-      console.log(response, "<<THIS IS RESPONSE PUT");
+      console.log("THIS IS RESPONSE PUT");
       auth()
     })
     .fail((hxr, text) => {
-      console.log(hxr);
-      console.log(text, "<<THIS IS ERROR PUT");
+      console.log("THIS IS ERROR PUT");
       const message = hxr.responseJSON.message
       showToast(message)
     })
@@ -262,6 +254,8 @@ function newTodo() {
       </div>
       `)
 
+  $("html").scrollLeft($(document).width() - $(window).width())
+
   $("#btn-add-cancel").on("click", (e) => {
     e.preventDefault()
     auth()
@@ -280,7 +274,6 @@ function addTodo() {
   const description = $("#add-description").val()
   const status = $('input[name=status]:checked', "#form-add").val()
   const due_date = $("#add-due_date").val()
-  console.log(title, description, status, due_date);
   $.ajax({
     method: "POST",
     url: base_url + "/todos",
@@ -290,12 +283,11 @@ function addTodo() {
     data: { title, description, status, due_date }
   })
     .done((response) => {
-      console.log(response, "<<THIS IS RESPONSE ADD");
+      console.log("THIS IS RESPONSE ADD");
       auth()
     })
     .fail((hxr, text) => {
-      console.log(hxr);
-      console.log(text, "<<THIS IS ERROR ADD");
+      console.log("THIS IS ERROR ADD");
       const message = hxr.responseJSON.message
       showToast(message)
     })
@@ -323,7 +315,7 @@ function fetchAllTodos() {
     }
   })
     .done((response) => {
-      console.log(response, "<<THIS IS RESPONSE GET TODOS");
+      console.log("THIS IS RESPONSE GET TODOS");
       $("#content-todos").empty()
       response.forEach(el => {
         let due = new Date(el.due_date).toISOString().substr(0, 10)
@@ -345,10 +337,11 @@ function fetchAllTodos() {
           `)
       })
       appendAddButton()
+      if (response.length <= 1) $("#content-todos").css("justify-content", "center")
+      else $("#content-todos").css("justify-content", "start")
     })
     .fail((hxr, text) => {
-      console.log(hxr);
-      console.log(text, "<<THIS IS ERROR GET TODOS");
+      console.log("THIS IS ERROR GET TODOS");
       const message = hxr.responseJSON.message
       showToast(message)
     })
@@ -384,14 +377,13 @@ function showWeather() {
     }
   })
     .done((response) => {
-      console.log(response, "<<THIS IS RESPONSE GET WEATHER");
+      console.log("THIS IS RESPONSE GET WEATHER");
       const { weather, temp } = response
       $("#weather").empty()
-      $("#weather").append(`<div>${weather}</div><div>${temp} C</div>`)
+      $("#weather").append(`<div class="topleft"><div>${weather}</div><div>${temp} °C</div></div>`)
     })
     .fail((hxr, text) => {
-      console.log(hxr);
-      console.log(text, "<<THIS IS ERROR GET WEATHER");
+      console.log("THIS IS ERROR GET WEATHER");
     })
 }
 
@@ -405,13 +397,11 @@ function onSignIn(googleUser) {
       tokenGoogle
     }
   })
-  .done(response => {
-    console.log(response);
-    localStorage.setItem("access_token", response.access_token)
-    auth()
-  })
-  .fail((hxr, text) => {
-    console.log(hxr);
-    console.log(text, "<<THIS IS ERROR GOOGLE LOGIN");
-  })
+    .done(response => {
+      localStorage.setItem("access_token", response.access_token)
+      auth()
+    })
+    .fail((hxr, text) => {
+      console.log("THIS IS ERROR GOOGLE LOGIN");
+    })
 }

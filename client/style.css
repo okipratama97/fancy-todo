@@ -86,14 +86,17 @@ h3 {
   margin-right: 15px;
   width: 90%;
   max-width: 450px;
+  min-width: 400px;
   position: relative;
   padding: 0;
   -webkit-box-shadow: 0 30px 60px 0 rgba(0,0,0,0.3);
   box-shadow: 0 30px 60px 0 rgba(0,0,0,0.3);
   text-align: center;
+  scroll-snap-type: x mandatory;
 }
 
 .content-add {
+  min-width: 150px;
   max-width: 150px;
 }
 
@@ -101,6 +104,13 @@ h3 {
   position: fixed;
   top: 8px;
   right: 16px;
+  font-size: 18px;
+}
+
+.topleft {
+  position: fixed;
+  top: 8px;
+  left: 16px;
   font-size: 18px;
 }
 
@@ -225,6 +235,14 @@ a.todo-anchor {
 
 a.red {
   color: #dd9292;
+}
+
+.center {
+  margin: auto;
+  /* max-width: 27%; */
+  width:max-content;
+  text-align: center;
+  padding-bottom: 10px;
 }
 
 /* ANIMATIONS */
