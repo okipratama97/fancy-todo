@@ -1,4 +1,4 @@
-const base_url = "http://localhost:3121"
+const base_url = "https://pancitodo.herokuapp.com"
 
 function auth() {
   if (localStorage.access_token) {
